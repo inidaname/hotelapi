@@ -35,11 +35,24 @@ func UserLogin(c *fiber.Ctx) error {
 
 func CreateUser(c *fiber.Ctx) error {
 
-	user := &models.User{}
+	payload, err := models.NewUser(models.User{})
 
-	usercoll := mgm.Coll(user).Create(user)
+	if err != nil {
+		return err
+	}
 
-	fmt.Println(usercoll)
+	if err := c.BodyParser(&payload); err != nil {
+		return err
+	}
+
+	fmt.Println(payload)
+
+	userColl := mgm.Coll(payload)
+
+	if err := userColl.Create(payload); err != nil {
+		return err
+	}
+
 	return c.Status(200).JSON(&fiber.Map{
 		"success": false,
 		"message": "Must provide email and password",

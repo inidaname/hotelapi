@@ -1,6 +1,10 @@
 package models
 
-import "github.com/kamva/mgm/v3"
+import (
+	"errors"
+
+	"github.com/kamva/mgm/v3"
+)
 
 type User struct {
 	mgm.DefaultModel `bson:",inline"`
@@ -13,4 +17,15 @@ type User struct {
 
 type Users struct {
 	Users []User `json:"users"`
+}
+
+func NewUser(user User) (*User, error) {
+	var err = errors.New("this throw error")
+	return &User{
+		FullName:    user.FullName,
+		Email:       user.Email,
+		Password:    user.Password,
+		PhoneNumber: user.PhoneNumber,
+		Level:       user.Level,
+	}, err
 }
