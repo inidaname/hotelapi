@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/inidaname/hotelapi/models"
 	"github.com/kamva/mgm/v3"
@@ -35,25 +33,27 @@ func UserLogin(c *fiber.Ctx) error {
 
 func CreateUser(c *fiber.Ctx) error {
 
-	payload, err := models.NewUser(models.User{})
-
-	if err != nil {
-		return err
-	}
+	payload := models.NewUser(models.User{})
 
 	if err := c.BodyParser(&payload); err != nil {
-		return err
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"success": false,
+			"message": "Something went wrong",
+			"status":  fiber.StatusInternalServerError,
+		})
 	}
-
-	fmt.Println(payload)
 
 	userColl := mgm.Coll(payload)
 
 	if err := userColl.Create(payload); err != nil {
-		return err
+		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
+			"success": false,
+			"message": "Something went wrong",
+			"status":  fiber.StatusInternalServerError,
+		})
 	}
 
-	return c.Status(200).JSON(&fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"success": false,
 		"message": "Must provide email and password",
 		"status":  400,

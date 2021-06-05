@@ -14,5 +14,5 @@ type MongoInstance struct {
 var MI MongoInstance
 
 func ConnectDB() {
-	_ = mgm.SetDefaultConfig(nil, "hotels", options.Client().ApplyURI("mongodb://ocalhost:27017"))
+	_ = mgm.SetDefaultConfig(nil, "hotels", options.Client().ApplyURI("mongodb://localhost:27017"))
 }

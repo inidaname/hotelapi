@@ -1,8 +1,6 @@
 package models
 
 import (
-	"errors"
-
 	"github.com/kamva/mgm/v3"
 )
 
@@ -19,13 +17,12 @@ type Users struct {
 	Users []User `json:"users"`
 }
 
-func NewUser(user User) (*User, error) {
-	var err = errors.New("this throw error")
+func NewUser(user User) *User {
 	return &User{
 		FullName:    user.FullName,
 		Email:       user.Email,
 		Password:    user.Password,
 		PhoneNumber: user.PhoneNumber,
 		Level:       user.Level,
-	}, err
+	}
 }
