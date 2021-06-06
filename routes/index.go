@@ -14,5 +14,5 @@ func SetupRoutes(app *fiber.App) {
 	app.Use(jwtware.New(jwtware.Config{
 		SigningKey: []byte("secret"),
 	}))
-
+	app.Patch("/user/:id", controllers.UserUpdate)
 }
