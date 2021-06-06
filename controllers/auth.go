@@ -8,6 +8,7 @@ import (
 	"github.com/inidaname/hotelapi/models"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func UserLogin(c *fiber.Ctx) error {
@@ -53,7 +54,14 @@ func CreateUser(c *fiber.Ctx) error {
 			"status":  fiber.StatusBadRequest,
 		})
 	}
-	log.Println(payload)
+
+	bytes, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 17)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	payload.Password = string(bytes)
 
 	userColl := mgm.Coll(payload)
 
