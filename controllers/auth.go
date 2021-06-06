@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"log"
+
+	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
 	"github.com/inidaname/hotelapi/models"
 	"github.com/kamva/mgm/v3"
@@ -34,7 +37,6 @@ func UserLogin(c *fiber.Ctx) error {
 func CreateUser(c *fiber.Ctx) error {
 
 	payload := models.NewUser(models.User{})
-
 	if err := c.BodyParser(&payload); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"success": false,
@@ -42,6 +44,16 @@ func CreateUser(c *fiber.Ctx) error {
 			"status":  fiber.StatusInternalServerError,
 		})
 	}
+	_, err := govalidator.ValidateStruct(payload)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
+			"success": false,
+			"message": err.Error(),
+			"status":  fiber.StatusBadRequest,
+		})
+	}
+	log.Println(payload)
 
 	userColl := mgm.Coll(payload)
 
@@ -53,9 +65,14 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"success": false,
-		"message": "Must provide email and password",
-		"status":  400,
+	if err := payload.DefaultModel.Creating(); err != nil {
+		log.Println("This happened")
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(&fiber.Map{
+		"success": true,
+		"message": "User created successfully",
+		"status":  fiber.StatusCreated,
+		"data":    payload,
 	})
 }
