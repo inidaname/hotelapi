@@ -6,10 +6,10 @@ import (
 
 type User struct {
 	mgm.DefaultModel `bson:",inline" valid:"-"`
-	FullName         string `json:"fullName" bson:"fullName" valid:"required,alpha"`
-	Email            string `json:"email" bson:"email" valid:"required,alpha"`
-	Password         string `json:"password" bson:"password" valid:"required,alpha"`
-	PhoneNumber      string `json:"phoneNumber" bson:"phoneNumber" valid:"required,alpha"`
+	FullName         string `json:"fullName" bson:"fullName" valid:"required"`
+	Email            string `json:"email" bson:"email" valid:"required"`
+	Password         string `json:"password" bson:"password" valid:"required"`
+	PhoneNumber      string `json:"phoneNumber" bson:"phoneNumber" valid:"required"`
 	Level            string `json:"level" bson:"level" valid:"-"`
 }
 
