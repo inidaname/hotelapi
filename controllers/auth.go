@@ -28,12 +28,13 @@ func UserLogin(c *fiber.Ctx) error {
 		})
 	}
 
-	coll := mgm.Coll(user).SimpleFind(user, bson.M{"email": user.Email, "password": user.Password})
+	ctx := mgm.Ctx()
+	userColl := mgm.Coll(user).FindOne(ctx, bson.M{"email": user.Email})
 
 	return c.Status(fiber.StatusAccepted).JSON(&fiber.Map{
 		"success": true,
 		"message": "You are welcome to Hotel API",
-		"data":    coll,
+		"data":    userColl,
 	})
 }
 
